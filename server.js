@@ -9,7 +9,10 @@ console.log('Halo, kita akan belajar membuat server');
  * @param response: objek yang digunakan untuk menanggapi permintaan
  */
 const requestListener = (request, response) => {
-    response.setHeader('Content-Type', 'text/html');
+    response.setHeader('Content-Type', 'application/json');
+    //for personal header use X 
+    response.setHeader('X-Powered-By', 'NodeJS');
+
     // const method = request.method;
     // more clean with object destructuring
     const { method, url } = request;

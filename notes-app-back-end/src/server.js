@@ -7,6 +7,12 @@ const init = async () => {
     const server = Hapi.server({
         port: 8000,
         host: 'localhost',
+        routes: {
+            cors: {
+                origin: ['http://notesapp-v1.dicodingacademy.com/'],
+                // 'http://notesapp-v1.dicodingacademy.com:80/'
+            },
+        },
     });
 
     server.route(routes);

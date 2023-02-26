@@ -9,10 +9,28 @@ console.log('Halo, kita akan belajar membuat server');
  * @param response: objek yang digunakan untuk menanggapi permintaan
  */
 const requestListener = (request, response) => {
+    // const method = request.method;
+    // more clean with object destructuring
+    const { method } = request;
+
     response.setHeader('Content-Type', 'text/html');
- 
     response.statusCode = 200;
-    response.end('<h1>Halo HTTP Server!</h1>');
+    // method type is string: 'GET', 'POST', 'PUT', 'DELETE'
+    if(method === 'GET') {
+        response.end('<h1>Hello!</h1>');
+    }
+ 
+    if(method === 'POST') {
+        response.end('<h1>Hai!</h1>');
+    }
+
+    if(method === 'PUT') {
+        response.end('<h1>Bonjour!</h1>');
+    }
+ 
+    if(method === 'DELETE') {
+        response.end('<h1>Salam!</h1>');
+    }
 };
  
 const server = http.createServer(requestListener);

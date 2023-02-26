@@ -1,0 +1,17 @@
+{
+  "name": "notes-app-back-end",
+  "version": "1.0.0",
+  "description": "Learn build REST API for note app, Course Dicoding Back-End Developer Beginner",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./",
+    "start": "nodemon server.js"
+  },
+  "author": "Amal17",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.34.0",
+    "nodemon": "^2.0.20"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "hapi-web-service",
+  "version": "1.0.0",
+  "description": "Learn build web service with Hapi Framework, Course Dicoding Back-End Developer Beginner",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Amal17",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^21.3.0"
+  }
+}

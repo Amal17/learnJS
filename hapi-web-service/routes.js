@@ -51,7 +51,10 @@ const routes = [
         method: '*',
         path: '/{any*}',
         handler: (request, h) => {
-            return 'Halaman tidak ditemukan';
+            return h.response('Halaman tidak ditemukan')
+                        .code(404)
+                        .type('text/plain')
+                        .header('X-Custom', 'some-value');
         },
     },
 ];

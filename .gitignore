@@ -1,4 +1,8 @@
 */node_modules
 */package-lock.json
 */.eslintrc.json
-.DS_Strore
+*/.DS_Store
+.DS_Store
+.env
+.prod.env
+.DS_Store

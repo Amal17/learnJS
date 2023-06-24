@@ -6,3 +6,4 @@
 .env
 .prod.env
 .DS_Store
+src/api/uploads/file

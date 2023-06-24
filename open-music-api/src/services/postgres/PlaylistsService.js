@@ -69,7 +69,7 @@ class PlaylistsService {
       throw new InvariantError('Lagu gagal ditambahkan dalam Playlist')
     }
 
-    const payload = { playlistId: id, userId, action: 'add' }
+    const payload = { songId, playlistId: id, userId, action: 'add' }
     await this._playlistsActivitiesService.addActivities(payload)
 
     return result.rows[0].id
@@ -86,7 +86,7 @@ class PlaylistsService {
     const result = await this._pool.query(query)
 
     if (!result.rows.length) {
-      throw new NotFoundError('Album tidak ditemukan')
+      throw new NotFoundError('Playlist tidak ditemukan')
     }
 
     return result.rows[0]
@@ -119,7 +119,7 @@ class PlaylistsService {
       throw new NotFoundError('Lagu gagal dihapus dari Playlist. Id tidak ditemukan')
     }
 
-    const payload = { playlistId: id, userId, action: 'delete' }
+    const payload = { songId, playlistId: id, userId, action: 'delete' }
     await this._playlistsActivitiesService.addActivities(payload)
   }
 

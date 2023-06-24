@@ -1,11 +1,12 @@
 const autoBind = require('auto-bind')
 
 class PlaylistsHandler {
-  constructor (service, validator, songsService) {
+  constructor (service, validator, songsService, playlistActivitiesService) {
     this._service = service
     this._validator = validator
 
     this._songsService = songsService
+    this._playlistActivitiesService = playlistActivitiesService
 
     autoBind(this)
   }
@@ -98,6 +99,24 @@ class PlaylistsHandler {
     return {
       status: 'success',
       message: 'Lagu berhasil dihapus dari Playlist'
+    }
+  }
+
+  async getPlaylisActivitiestHandler (request) {
+    const { id } = request.params
+    const { id: credentialId } = request.auth.credentials
+
+    await this._service.verifyPlaylistAccess(id, credentialId)
+    await this._service.getPlaylistById(id)
+
+    const activities = await this._playlistActivitiesService.getActivities(id)
+
+    return {
+      status: 'success',
+      data: {
+        playlistId: id,
+        activities
+      }
     }
   }
 }

@@ -5,9 +5,10 @@ const NotFoundError = require('../../exceptions/NotFoundError')
 const AuthorizationError = require('../../exceptions/AuthorizationError')
 
 class PlaylistsService {
-  constructor (collaborationService) {
+  constructor (collaborationService, playlistsActivitiesService) {
     this._pool = new Pool()
     this._collaborationService = collaborationService
+    this._playlistsActivitiesService = playlistsActivitiesService
   }
 
   async addPlaylist (userId, { name }) {
@@ -54,7 +55,7 @@ class PlaylistsService {
     }
   }
 
-  async addSongToPlaylist (id, { songId }) {
+  async addSongToPlaylist (id, { songId }, userId) {
     const idPlaylistSong = `playlistSong-${nanoid(16)}`
 
     const query = {
@@ -67,6 +68,9 @@ class PlaylistsService {
     if (!result.rows.length) {
       throw new InvariantError('Lagu gagal ditambahkan dalam Playlist')
     }
+
+    const payload = { playlistId: id, userId, action: 'add' }
+    await this._playlistsActivitiesService.addActivities(payload)
 
     return result.rows[0].id
   }
@@ -103,7 +107,7 @@ class PlaylistsService {
     return playlist
   }
 
-  async deleteSongFromPlaylist (id, songId) {
+  async deleteSongFromPlaylist (id, songId, userId) {
     const query = {
       text: 'DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING id',
       values: [id, songId]
@@ -114,6 +118,9 @@ class PlaylistsService {
     if (!result.rows.length) {
       throw new NotFoundError('Lagu gagal dihapus dari Playlist. Id tidak ditemukan')
     }
+
+    const payload = { playlistId: id, userId, action: 'delete' }
+    await this._playlistsActivitiesService.addActivities(payload)
   }
 
   async verifyPlaylistOwner (id, owner) {

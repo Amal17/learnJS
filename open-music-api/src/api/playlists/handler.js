@@ -58,7 +58,7 @@ class PlaylistsHandler {
     await this._songsService.getSongById(songId)
     await this._service.verifyPlaylistAccess(id, credentialId)
 
-    const idPlaylistSong = await this._service.addSongToPlaylist(id, request.payload)
+    const idPlaylistSong = await this._service.addSongToPlaylist(id, request.payload, credentialId)
     const response = h.response({
       status: 'success',
       message: 'Lagu berhasil ditambahkan ke Playlists',
@@ -93,7 +93,7 @@ class PlaylistsHandler {
     const { songId } = request.payload
 
     await this._service.verifyPlaylistAccess(id, credentialId)
-    await this._service.deleteSongFromPlaylist(id, songId)
+    await this._service.deleteSongFromPlaylist(id, songId, credentialId)
 
     return {
       status: 'success',

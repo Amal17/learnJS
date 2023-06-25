@@ -3,12 +3,14 @@ const mapAlbumToModel = ({
   id,
   name,
   year,
+  cover_url,
   created_at,
   updated_at
 }) => ({
   id,
   name,
-  year: parseInt(year)
+  year: parseInt(year),
+  coverUrl: cover_url
 })
 
 const mapSongToModel = ({

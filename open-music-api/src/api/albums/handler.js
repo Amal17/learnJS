@@ -1,10 +1,11 @@
 const autoBind = require('auto-bind')
 
 class AlbumsHandler {
-  constructor (service, validator, storageService) {
+  constructor (service, validator, storageService, userAlbumLikesService) {
     this._service = service
     this._validator = validator
     this._storageService = storageService
+    this._userAlbumLikesService = userAlbumLikesService
 
     autoBind(this)
   }
@@ -84,6 +85,49 @@ class AlbumsHandler {
 
     response.code(201)
     return response
+  }
+
+  async postAlbumLikesHandler (request, h) {
+    const { id } = request.params
+    const { id: credentialId } = request.auth.credentials
+
+    await this._service.getAlbumById(id)
+    await this._userAlbumLikesService.addLikes(credentialId, id)
+
+    const response = h.response({
+      status: 'success',
+      message: 'Berhasil menyukai album'
+    })
+
+    response.code(201)
+    return response
+  }
+
+  async deleteAlbumLikesHandler (request) {
+    const { id } = request.params
+    const { id: credentialId } = request.auth.credentials
+
+    await this._service.getAlbumById(id)
+    await this._userAlbumLikesService.deleteLikes(credentialId, id)
+
+    return {
+      status: 'success',
+      message: 'Berhasil batal menyukai album'
+    }
+  }
+
+  async getAlbumLikesHandler (request) {
+    const { id } = request.params
+
+    await this._service.getAlbumById(id)
+    const likes = await this._userAlbumLikesService.getAlbumLikes(id)
+
+    return {
+      status: 'success',
+      data: {
+        likes
+      }
+    }
   }
 }
 

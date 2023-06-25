@@ -47,6 +47,27 @@ const routes = (handler) => [
         path: path.resolve(__dirname, 'file')
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/albums/{id}/likes',
+    handler: handler.postAlbumLikesHandler,
+    options: {
+      auth: 'notesapp_jwt'
+    }
+  },
+  {
+    method: 'DELETE',
+    path: '/albums/{id}/likes',
+    handler: handler.deleteAlbumLikesHandler,
+    options: {
+      auth: 'notesapp_jwt'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/albums/{id}/likes',
+    handler: handler.getAlbumLikesHandler
   }
 ]
 

@@ -20,6 +20,10 @@ class PlaylistService {
   async getSongsOnPlaylist (id) {
     const playlist = await this.getPlaylistById(id)
 
+    if (!playlist){
+      return []
+    }
+    
     const query = {
       text: `SELECT songs.id, songs.title, songs.performer
               FROM playlist_songs

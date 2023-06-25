@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const config = require('./utils/config')
+
 const Hapi = require('@hapi/hapi')
 const Jwt = require('@hapi/jwt')
 const Inert = require('@hapi/inert')
@@ -67,8 +69,8 @@ const init = async () => {
   const userAlbumLikesService = new UserAlbumLikesService(cacheService)
 
   const server = Hapi.server({
-    port: process.env.PORT,
-    host: process.env.HOST,
+    port: config.app.port,
+    host: config.app.host,
     debug: {
       request: ['error']
     },
@@ -120,12 +122,12 @@ const init = async () => {
 
   // mendefinisikan strategy autentikasi jwt
   server.auth.strategy('notesapp_jwt', 'jwt', {
-    keys: process.env.ACCESS_TOKEN_KEY,
+    keys: config.jwt.accessToken,
     verify: {
       aud: false,
       iss: false,
       sub: false,
-      maxAgeSec: process.env.ACCESS_TOKEN_AGE
+      maxAgeSec: config.jwt.age
     },
     validate: (artifacts) => ({
       isValid: true,

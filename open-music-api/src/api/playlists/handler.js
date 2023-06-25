@@ -102,22 +102,28 @@ class PlaylistsHandler {
     }
   }
 
-  async getPlaylisActivitiestHandler (request) {
+  async getPlaylisActivitiestHandler (request, h) {
     const { id } = request.params
     const { id: credentialId } = request.auth.credentials
 
     await this._service.verifyPlaylistAccess(id, credentialId)
     await this._service.getPlaylistById(id)
 
-    const activities = await this._playlistActivitiesService.getActivities(id)
+    const { fromCache, response: activities } = await this._playlistActivitiesService.getActivities(id)
 
-    return {
+    const response = h.response({
       status: 'success',
       data: {
         playlistId: id,
         activities
       }
+    })
+
+    if (fromCache) {
+      response.header('X-Data-Source', 'cache')
     }
+
+    return response
   }
 }
 

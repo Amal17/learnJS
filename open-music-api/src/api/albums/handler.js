@@ -125,7 +125,7 @@ class AlbumsHandler {
     const { id } = request.params
 
     await this._service.getAlbumById(id)
-    const { fromCache, total: likes } = await this._userAlbumLikesService.getAlbumLikes(id)
+    const { fromCache, response: likes } = await this._userAlbumLikesService.getAlbumLikes(id)
 
     const response = h.response({
       status: 'success',

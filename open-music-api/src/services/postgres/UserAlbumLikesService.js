@@ -43,6 +43,8 @@ class UserAlbumLikesService {
       throw new InvariantError('Gagal menyukai albums')
     }
 
+    await this._cacheService.delete(`albumLikes:${idAlbum}`)
+
     return result.rows[0].id
   }
 
@@ -64,14 +66,16 @@ class UserAlbumLikesService {
       throw new InvariantError('Gagal batal menyukai albums')
     }
 
+    await this._cacheService.delete(`albumLikes:${idAlbum}`)
+
     return result.rows[0].id
   }
 
   async getAlbumLikes (idAlbum) {
     try {
       const result = await this._cacheService.get(`albumLikes:${idAlbum}`)
-      const total = JSON.parse(result)
-      return { fromCache: true, total }
+      const response = JSON.parse(result)
+      return { fromCache: true, response }
     } catch (error) {
       const query = {
         text: 'SELECT COUNT(*) AS total FROM user_album_likes WHERE album_id = $1',
@@ -80,9 +84,9 @@ class UserAlbumLikesService {
 
       const result = await this._pool.query(query)
 
-      const total = parseInt(result.rows[0].total)
-      await this._cacheService.set(`albumLikes:${idAlbum}`, JSON.stringify(total))
-      return { fromCache: false, total }
+      const response = parseInt(result.rows[0].total)
+      await this._cacheService.set(`albumLikes:${idAlbum}`, JSON.stringify(response))
+      return { fromCache: false, response }
     }
   }
 }

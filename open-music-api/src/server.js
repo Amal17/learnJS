@@ -63,7 +63,7 @@ const init = async () => {
   const usersService = new UsersService()
   const authenticationsService = new AuthenticationsService()
   const collaborationsService = new CollaborationsService()
-  const playlistActivitiesService = new PlaylistActivitiesService()
+  const playlistActivitiesService = new PlaylistActivitiesService(cacheService)
   const playlistsService = new PlaylistsService(collaborationsService, playlistActivitiesService)
   const storageService = new StorageService(path.resolve(__dirname, 'api/albums/file/images'))
   const userAlbumLikesService = new UserAlbumLikesService(cacheService)

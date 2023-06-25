@@ -4,8 +4,9 @@ const InvariantError = require('../../exceptions/InvariantError')
 const ClientError = require('../../exceptions/ClientError')
 
 class UserAlbumLikesService {
-  constructor () {
+  constructor (cacheService) {
     this._pool = new Pool()
+    this._cacheService = cacheService
   }
 
   async getId (idUser, idAlbum) {
@@ -67,14 +68,22 @@ class UserAlbumLikesService {
   }
 
   async getAlbumLikes (idAlbum) {
-    const query = {
-      text: 'SELECT COUNT(*) AS total FROM user_album_likes WHERE album_id = $1',
-      values: [idAlbum]
+    try {
+      const result = await this._cacheService.get(`albumLikes:${idAlbum}`)
+      const total = JSON.parse(result)
+      return { fromCache: true, total }
+    } catch (error) {
+      const query = {
+        text: 'SELECT COUNT(*) AS total FROM user_album_likes WHERE album_id = $1',
+        values: [idAlbum]
+      }
+
+      const result = await this._pool.query(query)
+
+      const total = parseInt(result.rows[0].total)
+      await this._cacheService.set(`albumLikes:${idAlbum}`, JSON.stringify(total))
+      return { fromCache: false, total }
     }
-
-    const result = await this._pool.query(query)
-
-    return parseInt(result.rows[0].total)
   }
 }
 

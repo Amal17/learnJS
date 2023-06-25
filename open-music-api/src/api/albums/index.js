@@ -14,7 +14,8 @@ module.exports = {
       service,
       validator,
       storageService,
-      userAlbumLikesService)
+      userAlbumLikesService
+    )
     server.route(routes(albumsHandler))
   }
 }

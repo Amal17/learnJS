@@ -1,7 +1,12 @@
 const autoBind = require('auto-bind')
 
 class AlbumsHandler {
-  constructor (service, validator, storageService, userAlbumLikesService) {
+  constructor (
+    service,
+    validator,
+    storageService,
+    userAlbumLikesService
+  ) {
     this._service = service
     this._validator = validator
     this._storageService = storageService
@@ -116,18 +121,24 @@ class AlbumsHandler {
     }
   }
 
-  async getAlbumLikesHandler (request) {
+  async getAlbumLikesHandler (request, h) {
     const { id } = request.params
 
     await this._service.getAlbumById(id)
-    const likes = await this._userAlbumLikesService.getAlbumLikes(id)
+    const { fromCache, total: likes } = await this._userAlbumLikesService.getAlbumLikes(id)
 
-    return {
+    const response = h.response({
       status: 'success',
       data: {
         likes
       }
+    })
+
+    if (fromCache) {
+      response.header('X-Data-Source', 'cache')
     }
+
+    return response
   }
 }
 

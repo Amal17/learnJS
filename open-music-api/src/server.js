@@ -48,10 +48,14 @@ const StorageService = require('./services/storage/StorageServices')
 // Album Likes
 const UserAlbumLikesService = require('./services/postgres/UserAlbumLikesService')
 
+// Redis chacing
+const CacheService = require('./services/redis/CacheService')
+
 // Error
 const ClientError = require('./exceptions/ClientError')
 
 const init = async () => {
+  const cacheService = new CacheService()
   const albumsService = new AlbumsService()
   const songsService = new SongsService()
   const usersService = new UsersService()
@@ -60,7 +64,7 @@ const init = async () => {
   const playlistActivitiesService = new PlaylistActivitiesService()
   const playlistsService = new PlaylistsService(collaborationsService, playlistActivitiesService)
   const storageService = new StorageService(path.resolve(__dirname, 'api/albums/file/images'))
-  const userAlbumLikesService = new UserAlbumLikesService()
+  const userAlbumLikesService = new UserAlbumLikesService(cacheService)
 
   const server = Hapi.server({
     port: process.env.PORT,
